@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Access Worksheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 60px;
+      background: #f9f9f9;
+    }
+    .error {
+      border: 1px solid #ffdddd;
+      background: #fff8f8;
+      padding: 25px;
+      border-radius: 8px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get('file');
+
+    const ALLOWED_FILES = [
+      "worksheet1_solution.pdf",
+      "worksheet2_solution.pdf"
+    ];
+
+    if (!file || !ALLOWED_FILES.includes(file)) {
+      document.body.innerHTML = `
+        <div class="error">
+          <h2>❌ Invalid or missing file</h2>
+          <p>Only selected worksheets can be accessed.</p>
+        </div>
+      `;
+    } else {
+      setTimeout(() => {
+        window.location.href = file + `?t=${Date.now()}`;
+      }, 1000);
+
+      document.body.innerHTML = `
+        <p>✅ Opening worksheet...</p>
+      `;
+    }
+  </script>
+</body>
+</html>
