@@ -1,15 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Redirecting...</title>
-  <script>
-    function redirectToPDF() {
-      alert("Redirecting to the answer sheet...");
-      window.location.href = "https://crj007.github.io/IGCSE/class10/worksheets/CS_WS2_10_ans.pdf";
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #ffffff;
+      font-family: Arial, sans-serif;
     }
-  </script>
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #000000;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
-<body onload="redirectToPDF()">
-  <h2>Please wait... redirecting</h2>
+<body>
+  <h1>Redirecting to answer sheet...</h1>
+  <div class="loader"></div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "https://crj007.github.io/IGCSE/class10/worksheets/CS_WS2_10_ans.pdf";
+    }, 5000); // 5 seconds
+  </script>
 </body>
 </html>
