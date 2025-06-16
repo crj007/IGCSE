@@ -5,35 +5,49 @@
   <title>Redirecting...</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;
+      font-family: "Segoe UI", sans-serif;
+      background: #fdfdfd;
       text-align: center;
-      padding: 50px;
+      padding: 80px 20px;
+      color: #333;
     }
-    .loader {
-      margin: 20px auto;
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #000000;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
     }
-    .countdown {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #555;
+
+    .spinner {
+      margin: 30px auto;
+      width: 80px;
+      height: 80px;
+      animation: spin 1.2s linear infinite;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .countdown {
+      font-size: 18px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    .fadeout {
+      opacity: 0.3;
+    }
   </style>
 </head>
 <body>
-  <h1 id="msg">Redirecting to answer sheet in <span id="counter">5</span> seconds...</h1>
-  <div class="loader"></div>
-  <div class="countdown" id="note"></div>
+
+  <h1 id="msg">Redirecting to your answer sheet in <span id="counter">5</span> seconds...</h1>
+
+  <!-- Spinning PDF icon -->
+  <img class="spinner" src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="Loading...">
+
+  <div class="countdown" id="note">Please wait while we prepare your download.</div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -43,10 +57,10 @@
     const noteEl = document.getElementById("note");
 
     if (!file) {
-      document.body.innerHTML = "<h2>Error: File parameter missing.</h2>";
+      document.body.innerHTML = "<h2>Error: No file specified.</h2>";
     } else if (sessionStorage.getItem(redirectKey)) {
       document.getElementById("msg").innerText = "You’ve already opened this file.";
-      document.querySelector(".loader").style.display = "none";
+      document.querySelector(".spinner").classList.add("fadeout");
     } else {
       let count = 5;
 
@@ -57,10 +71,5 @@
         if (count <= 0) {
           clearInterval(countdown);
           sessionStorage.setItem(redirectKey, "yes");
-          window.location.href = file + "?v=" + Date.now();
+          window.location.href = `${file}?v=${Date.now()}`;
         }
-      }, 1000);
-    }
-  </script>
-</body>
-</html>
