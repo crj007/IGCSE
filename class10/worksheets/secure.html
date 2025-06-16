@@ -1,26 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Redirecting...</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #ffffff;
       font-family: Arial, sans-serif;
+      background-color: #fff;
+      text-align: center;
+      padding: 50px;
     }
-
-    h1 {
-      color: #333;
-      margin-bottom: 20px;
-    }
-
     .loader {
+      margin: 20px auto;
       border: 8px solid #f3f3f3;
       border-top: 8px solid #000000;
       border-radius: 50%;
@@ -28,7 +19,6 @@
       height: 60px;
       animation: spin 1s linear infinite;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -40,9 +30,17 @@
   <div class="loader"></div>
 
   <script>
-    setTimeout(() => {
-      window.location.href = "https://crj007.github.io/IGCSE/class10/worksheets/CS_WS2_10_ans.pdf";
-    }, 5000); // 5 seconds
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");
+
+    if (!file) {
+      document.body.innerHTML = "<h2>Error: File parameter missing.</h2>";
+    } else {
+      setTimeout(() => {
+        // Redirect with cache busting
+        window.location.href = file + "?v=3";
+      }, 5000);
+    }
   </script>
 </body>
 </html>
