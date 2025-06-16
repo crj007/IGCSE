@@ -1,49 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Access Worksheet</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 60px;
-      background: #f9f9f9;
-    }
-    .error {
-      border: 1px solid #ffdddd;
-      background: #fff8f8;
-      padding: 25px;
-      border-radius: 8px;
-      margin-top: 50px;
-    }
-  </style>
+    <title>Secure File Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f0f0f0;
+        }
+        .error {
+            background: #ffecec;
+            border: 1px solid #ffadad;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #d8000c;
+        }
+    </style>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const file = params.get("file");
+        const now = new Date();
+
+        const ALLOWED_FILES = [
+            "10 Computer Science Worksheet 2 ans.pdf"
+        ];
+
+        if (!file || !ALLOWED_FILES.includes(file)) {
+            showError("Invalid or missing file parameter.");
+        } else {
+            // Redirect to the file
+            const encodedFile = encodeURIComponent(file).replace(/%20/g, " ");
+            window.location.href = encodedFile;
+        }
+
+        function showError(message) {
+            document.body.innerHTML = `
+                <div class="error">
+                    <h2>🚫 Access Denied</h2>
+                    <p>${message}</p>
+                    <p><small>${now.toLocaleString()}</small></p>
+                </div>
+            `;
+        }
+    </script>
 </head>
 <body>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const file = params.get('file');
-
-    const ALLOWED_FILES = [
-      "10 Computer Science Worksheet 2 ans.pdf"
-    ];
-
-    if (!file || !ALLOWED_FILES.includes(file)) {
-      document.body.innerHTML = `
-        <div class="error">
-          <h2>❌ Invalid or missing file</h2>
-          <p>Only selected worksheets can be accessed.</p>
-        </div>
-      `;
-    } else {
-      setTimeout(() => {
-        window.location.href = file + "?t=" + Date.now();
-      }, 1000);
-
-      document.body.innerHTML = `
-        <p>✅ Opening worksheet...</p>
-      `;
-    }
-  </script>
+    <p>Loading your file...</p>
 </body>
 </html>
