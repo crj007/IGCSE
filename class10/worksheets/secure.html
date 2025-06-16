@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <title>Protected Access</title>
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
@@ -45,23 +45,58 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    #login-box {
+      margin-top: 40px;
+    }
+
+    input {
+      padding: 8px;
+      width: 200px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    #main-content {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
-  <h1 id="msg">Redirecting to your answer sheet in <span id="counter">5</span> seconds...</h1>
+  <div id="login-box">
+    <h1>Enter Password to View</h1>
+    <input type="password" id="password" placeholder="Enter password" />
+    <br>
+    <button onclick="checkPassword()">Submit</button>
+    <div class="error" id="error-msg"></div>
+  </div>
 
-  <!-- Spinning PDF icon -->
-  <img class="spinner" src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="Loading...">
-
-  <div class="countdown" id="note">Please wait while we prepare your download.</div>
-
-  <!-- Fallback link -->
-  <div id="fallback">
-    <p>If not redirected, <a id="manualLink" href="#">click here</a>.</p>
+  <div id="main-content">
+    <h1 id="msg">Redirecting to your answer sheet in <span id="counter">5</span> seconds...</h1>
+    <img class="spinner" src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="Loading...">
+    <div class="countdown" id="note">Please wait while we prepare your download.</div>
+    <div id="fallback">
+      <p>If not redirected, <a id="manualLink" href="#">click here</a>.</p>
+    </div>
   </div>
 
   <script>
+    const PASSWORD = "cs10rocks"; // 🔒 CHANGE THIS TO YOUR DESIRED PASSWORD
     const params = new URLSearchParams(window.location.search);
     const file = params.get("file");
     const redirectKey = `redirected_${file}`;
@@ -69,12 +104,31 @@
     const manualLink = document.getElementById("manualLink");
     const fallback = document.getElementById("fallback");
 
-    if (!file) {
-      document.body.innerHTML = "<h2>Error: No file specified.</h2>";
-    } else if (sessionStorage.getItem(redirectKey)) {
-      document.getElementById("msg").innerText = "You’ve already opened this file.";
-      document.querySelector(".spinner").style.opacity = "0.3";
-    } else {
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      const error = document.getElementById("error-msg");
+
+      if (input === PASSWORD) {
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+        startRedirect();
+      } else {
+        error.innerText = "❌ Incorrect password";
+      }
+    }
+
+    function startRedirect() {
+      if (!file) {
+        document.body.innerHTML = "<h2>Error: No file specified.</h2>";
+        return;
+      }
+
+      if (sessionStorage.getItem(redirectKey)) {
+        document.getElementById("msg").innerText = "You’ve already opened this file.";
+        document.querySelector(".spinner").style.opacity = "0.3";
+        return;
+      }
+
       let count = 5;
       const countdown = setInterval(() => {
         count--;
