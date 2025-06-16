@@ -35,8 +35,15 @@
       margin-top: 10px;
     }
 
-    .fadeout {
-      opacity: 0.3;
+    #fallback {
+      margin-top: 20px;
+      display: none;
+    }
+
+    a {
+      color: #e74c3c;
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -49,27 +56,39 @@
 
   <div class="countdown" id="note">Please wait while we prepare your download.</div>
 
+  <!-- Fallback link -->
+  <div id="fallback">
+    <p>If not redirected, <a id="manualLink" href="#">click here</a>.</p>
+  </div>
+
   <script>
     const params = new URLSearchParams(window.location.search);
     const file = params.get("file");
     const redirectKey = `redirected_${file}`;
     const counterEl = document.getElementById("counter");
-    const noteEl = document.getElementById("note");
+    const manualLink = document.getElementById("manualLink");
+    const fallback = document.getElementById("fallback");
 
     if (!file) {
       document.body.innerHTML = "<h2>Error: No file specified.</h2>";
     } else if (sessionStorage.getItem(redirectKey)) {
       document.getElementById("msg").innerText = "You’ve already opened this file.";
-      document.querySelector(".spinner").classList.add("fadeout");
+      document.querySelector(".spinner").style.opacity = "0.3";
     } else {
       let count = 5;
-
       const countdown = setInterval(() => {
         count--;
         counterEl.innerText = count;
-
         if (count <= 0) {
           clearInterval(countdown);
           sessionStorage.setItem(redirectKey, "yes");
-          window.location.href = `${file}?v=${Date.now()}`;
+          const targetUrl = `${file}?v=${Date.now()}`;
+          manualLink.href = targetUrl;
+          fallback.style.display = "block";
+          window.location.href = targetUrl;
         }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
